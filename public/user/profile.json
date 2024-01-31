@@ -1,0 +1,38 @@
+{
+  "servers": {
+      "5445": {"name" : "Asdrubale Server", "icon" : "../user/cached/asd.png"},
+      "8743": {"name": "Ian Server", "icon" : "../user/cached/logo.png"}}, 
+  "chats": {
+    "Asdrubale": [
+      {
+        "text": "Ciao!",
+        "username": "Sim0",
+        "roles": [],
+        "pfp": "/user/cached/pfp.jpg"
+      },
+      {
+        "text": "Come butta pastasciutta!",
+        "username": "Asdrubale",
+        "roles": [
+          {
+            "role": "ADMIN",
+            "color": "red"
+          },
+          {
+            "role": "MOD++",
+            "color": "green"
+          },
+          {
+            "role": "CIRO",
+            "color": "#db247c"
+          },
+          {
+            "role": "LGBT",
+            "color": "purple"
+          }
+        ],
+        "pfp": "/user/cached/pfp2.jpg"
+      }
+    ]
+  }
+}
