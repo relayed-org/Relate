@@ -1,7 +1,92 @@
 {
   "servers": {
-      "5445": {"name" : "Asdrubale Server", "icon" : "../user/cached/asd.png"},
-      "8743": {"name": "Ian Server", "icon" : "../user/cached/logo.png"}}, 
+    "5445": {
+      "lastChat": "Generale",
+      "name": "Asdrubale Server",
+      "icon": "../user/cached/asd.png",
+      "groups": {
+        "Welcome": {
+          "Rules": {}
+        },
+        "Text Channels": {
+          "Generale": {
+            "chats": [
+              {
+                "text": "Benvenuti nel mio server!",
+                "username": "Asdrubale",
+                "roles": [
+                  {
+                    "role": "OWNER",
+                    "color": "red"
+                  }
+                ],
+                "pfp": "/user/cached/pfp2.jpg"
+              },
+              {
+                "text": "Grazie!",
+                "username": "Sim0",
+                "roles": [],
+                "pfp": "/user/cached/pfp.jpg"
+              }
+            ]
+          },
+          "Chat #1": {
+            "chats": [
+              {
+                "text": "Chat #1",
+                "username": "Sim0",
+                "roles": [],
+                "pfp": "/user/cached/pfp.jpg"
+              }
+            ]
+          },
+          "Chat #2": {}
+        },
+        "Voice Channels": {
+          "Asdru-vocale": {
+            "active": [
+              "/user/cached/pfp.jpg",
+              "/user/cached/pfp2.jpg"
+            ]
+          },
+          "Vocale giocatori": {
+            "active": [
+              "/user/cached/logo.png"
+            ]
+          }
+        }
+      }
+    },
+    "8743": {
+      "lastChat": "Generale",
+      "name": "Ian Server",
+      "icon": "../user/cached/logo.png",
+      "groups": {
+        "Text Channels": {
+          "Generale": {
+            "chats": [
+              {
+                "text": "Benvenuti nel mio server!",
+                "username": "Ian",
+                "roles": [
+                  {
+                    "role": "OWNER",
+                    "color": "red"
+                  },
+                  {
+                    "role": "MOD++",
+                    "color": "green"
+                  }
+                ],
+                "pfp": "/user/cached/logo.png"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "lastChat": "Asdrubale",
   "chats": {
     "Asdrubale": [
       {
@@ -13,25 +98,22 @@
       {
         "text": "Come butta pastasciutta!",
         "username": "Asdrubale",
-        "roles": [
-          {
-            "role": "ADMIN",
-            "color": "red"
-          },
-          {
-            "role": "MOD++",
-            "color": "green"
-          },
-          {
-            "role": "CIRO",
-            "color": "#db247c"
-          },
-          {
-            "role": "LGBT",
-            "color": "purple"
-          }
-        ],
+        "roles": [],
         "pfp": "/user/cached/pfp2.jpg"
+      }
+    ],
+    "Ian": [
+      {
+        "text": "Relayed!",
+        "username": "Ian",
+        "roles": [],
+        "pfp": "/user/cached/logo.png"
+      },
+      {
+        "text": "Ciao!",
+        "username": "Sim0",
+        "roles": [],
+        "pfp": "/user/cached/pfp.jpg"
       }
     ]
   }

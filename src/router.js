@@ -9,7 +9,7 @@ const routes = [
     component: home,
   },
   {
-    path: '/server/:ServerInfo',
+    path: '/server/:ServerId',
     name: 'server', // Make sure you have a name for the route
     component: ServerComponent,
     props: true,

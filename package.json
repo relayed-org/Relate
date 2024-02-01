@@ -13,6 +13,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "axios": "^1.6.7",
     "core-js": "^3.8.3",
     "electron": "^28.1.4",
     "filesystem": "^1.0.1",

@@ -1,73 +1,67 @@
 <template>
   <div id="app">
-    <SidebarMain />
     <div class="container">
-    <div class="servertitle">
-      <p>{{ServerInfo}}</p>
-    </div>
-    <div class="chats">
-      <div>
-        <p>Chat #1</p>
+      <div class="servertitle">
+        <p>{{ server.name }}</p>
       </div>
-      <div>
-        <p>Chat #2</p>
-      </div>
-      <div>
-        <p>Chat #3</p>
-      </div>
-    </div>
-    <div class="chats">
-      <div>
-        <p>Vocale #1</p>
-        <div class="pfpvocale">
-          <img src="@/assets/pfp.jpg" />
-          <img src="@/assets/pfp2.jpg" />
+      <div v-for="(channel, group) in server.groups" :key="group" class="chats">
+        <p id="category">--- {{ group }} ---</p>
+        <div v-for="(data, channelName) in channel" :key="channelName" class="chat-item">
+          <p @click="this.chats=data['chats']; this.selectedChat = channelName;" :class="{ 'selectedChat': channelName == this.selectedChat }">{{ channelName }}</p>
+          <div class="pfpvocale">
+            <img v-for="(userData, user) in data.active" :key="user" :src="userData" />
+          </div>
         </div>
       </div>
-      <div>
-        <p>Vocale #2</p>
-      </div>
-      <div>
-        <p>Vocale #3</p>
-      </div>
     </div>
-  </div>
+    <ChatMessage v-for="(message, index) in chats" :key="index" :message="message.text" :username="message.username" :roles="message.roles" :pfp="message.pfp" />
   </div>
 </template>
-
-
 <script>
-import SidebarMain from './components/SidebarMain.vue'
-
-export default {
-  name: 'App',
-  components: {
-    SidebarMain,
-  },
-  props: {
-
-    ServerInfo: String,
-
-  },
-  }
-
+  import ChatMessage from './components/ChatMessage.vue';
+  import axios from 'axios';
+  export default {
+    name: 'App',
+    components: {
+      ChatMessage
+    },
+    data() {
+      return {
+        server: {},
+        chats: [],
+        selectedChat: String,
+      };
+    },
+    props: {
+      ServerId: String,
+    },
+    methods: {
+      fetchData() {
+        const filePath = '/user/profile.json';
+        axios.get(filePath).then(response => {
+          this.server = response.data.servers[this.ServerId];
+          this.chats = this.server.groups['Text Channels'][this.server.lastChat]['chats'];
+          this.selectedChat = this.server.lastChat;
+        }).catch(error => {
+          console.error('Error fetching server data:', error);
+        });
+      },
+    },
+    created() {
+      this.fetchData();
+    },
+    beforeRouteUpdate(to, from, next) {
+      this.fetchData();
+      next();
+    },
+  };
 </script>
-
-<style>
-#MainPanel {
-  position: relative;
-}
-p {
-    margin: 0;
-    padding: 0;
-  }
-
+<style scoped>
   .container {
     position: relative;
     display: flex;
     flex-direction: column;
-    min-width: 8rem;
-    max-width: 8rem;
+    width: 12rem;
     background-color: var(--colore2);
     padding: 0.5rem;
     align-items: center;
@@ -75,8 +69,7 @@ p {
     z-index: 31;
     border-right: 0.3rem solid var(--colore3);
     box-sizing: border-box;
-
-     /* Per allineare */
+    /* Per allineare */
     float: left;
   }
 
@@ -86,7 +79,7 @@ p {
     font-weight: 800;
     text-align: center;
     margin-bottom: 1rem;
-    border-bottom: solid var(--colore3) 0.2rem;
+    border-bottom: solid var(--colore3) 0.15rem;
   }
 
   .pfpvocale img {
@@ -104,9 +97,24 @@ p {
     gap: 0.6rem;
     display: flex;
     flex-direction: column;
-    border-bottom: solid var(--colore3) 0.2rem;
+    border: solid var(--colore3) 0.15rem;
     padding: 1rem 0 1rem 0;
+    background-color: #1c1a27;
+    border-radius: 0.5rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
   }
 
- 
+  .selectedChat {
+    background-color: red;
+  }
+
+  .chats p {
+    transition: ease 0.5s;
+  }
+
+  .chats p:hover {
+    transform: scale(1.1);
+    transition: ease 0.5s;
+  }
 </style>
