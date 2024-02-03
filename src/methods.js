@@ -1,4 +1,3 @@
-// methods.js
 import axios from 'axios';
 
 export function fetchData() {
