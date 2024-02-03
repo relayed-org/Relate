@@ -1,5 +1,4 @@
 <template>
-  <div id="app">
     <div class="container">
       <div class="servertitle">
         <p>{{ server.name }}</p>
@@ -15,7 +14,6 @@
       </div>
     </div>
     <ChatMessage v-for="(message, index) in chats" :key="index" :message="message.text" :username="message.username" :roles="message.roles" :pfp="message.pfp" />
-  </div>
 </template>
 <script>
   import ChatMessage from './components/ChatMessage.vue';

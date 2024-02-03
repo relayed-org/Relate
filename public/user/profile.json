@@ -87,6 +87,11 @@
     }
   },
   "lastChat": "Asdrubale",
+  "friends":[
+    "Asdrubale",
+    "Ian",
+    "Niled"
+  ],
   "chats": {
     "Asdrubale": [
       {

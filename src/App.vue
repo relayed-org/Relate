@@ -39,10 +39,8 @@
   }
 
   .router-link {
-    width: 100%;
     text-decoration: none;
     color: inherit;
-    /* Add any other styles you want to remove or customize */
   }
 
   p {

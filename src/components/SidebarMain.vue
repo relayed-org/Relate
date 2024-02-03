@@ -9,7 +9,7 @@
         <p class="status">ONLINE</p>
       </div>
     </div>
-    <router-link class="router-link" v-for="(ServerInfo, index) in servers" :key="index" :to="{ name: 'server', params: { ServerId: index } }">
+    <router-link class="router-link server-link" v-for="(ServerInfo, index) in servers" :key="index" :to="{ name: 'server', params: { ServerId: index } }">
       <div @click="selectedServer=ServerInfo['name']" class="server" :class="{ 'selectedServer': ServerInfo['name'] == this.selectedServer }">
         <img :src="ServerInfo['icon']" />
         <p class="notifica">
@@ -25,7 +25,8 @@
   </div>
 </template>
 <script>
-  import axios from 'axios';
+  import { fetchData } from '../methods'; 
+
   export default {
     data() {
       return {
@@ -33,18 +34,13 @@
         selectedServer: null
       };
     },
-    methods: {
-      fetchData() {
-        const filePath = '/user/profile.json';
-        axios.get(filePath).then(response => {
-          this.servers = response.data.servers;
-        }).catch(error => {
-          console.error('Error fetching server data:', error);
-        });
-      },
-    },
-    created() {
-      this.fetchData();
+    async created() {
+      try {
+          const data = await fetchData();
+          this.servers = data.servers;
+       } catch (error) {
+          console.error('Error in created hook:', error);
+      }
     },
   };
 </script>
@@ -137,6 +133,10 @@
 
   .selectedServer {
     background-color: red;
+  }
+
+  .server-link{
+    width: 100%;
   }
 
   .server img:hover {

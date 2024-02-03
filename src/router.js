@@ -1,17 +1,17 @@
 // router.js
 import { createRouter, createWebHistory } from 'vue-router';
-import ServerComponent from './ServerPage.vue';
-import home from './HomePage.vue';
+import serverComponent from './ServerPage.vue';
+import homePage from './HomePage.vue';
 
 const routes = [
   {
     path: '/',
-    component: home,
+    component: homePage,
   },
   {
     path: '/server/:ServerId',
     name: 'server', // Make sure you have a name for the route
-    component: ServerComponent,
+    component: serverComponent,
     props: true,
   },
   

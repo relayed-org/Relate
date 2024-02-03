@@ -1,52 +1,65 @@
 <template>
-  <div id="app">
     <div class="container">
-      <p class="title">Add a friend</p>
-      <input placeholder="Add Friend..." id="addFriend" />
-      <button>Add</button>
-      <p class="title">Your friend list</p>
+        <button @click="setView('friends')">Friends</button>
+    
+      <p class="title">Direct Messages</p>
       <p class="friend" :class="{ 'selectedFriend':  friend == this.chat }" v-for="(userChats, friend) in chats" :key="friend" @click="setChats(friend)">
         {{ friend }}
       </p>
     </div>
-    <div id="MainPanel">
-      <ChatMessage v-for="(message, index) in chats[chat]" :key="index" :message="message.text" :username="message.username" :roles="message.roles" :pfp="message.pfp" />
+    <div>
+      <template v-if="currentView === 'messages'">
+        <ChatMessage v-for="(message, index) in chats[chat]" :key="index" :message="message.text" :username="message.username" :roles="message.roles" :pfp="message.pfp" />
+        <input style="position: absolute; bottom: 0;"/>
+      </template>
+      <template v-else-if="currentView === 'friends'">
+        <input placeholder="Add Friend..." id="addFriend" />
+      <button>Add</button>
+      <p class="friend" v-for="friend in friends" :key="friend" @click="addChat(friend)">
+        {{ friend }}
+      </p>
+      </template>
     </div>
-  </div>
 </template>
+
 <script>
-  import ChatMessage from './components/ChatMessage.vue';
-  import axios from 'axios';
-  export default {
-    name: 'App',
-    components: {
-      ChatMessage,
+import ChatMessage from './components/ChatMessage.vue';
+import { fetchData } from './methods'; 
+
+export default {
+  name: 'App',
+  components: {
+    ChatMessage,
+  },
+  data() {
+    return {
+      friends: [],
+      chats: [],
+      chat: "Asdrubale",
+      currentView: "messages"
+    };
+  },
+  methods: {
+    setView(view) {
+      this.currentView = view
     },
-    data() {
-      return {
-        chats: [],
-        chat: "Asdrubale"
-      };
-    },
-    methods: {
-      setChats(friend) {
-        this.chat = friend;
-      },
-      fetchData() {
-        const filePath = '/user/profile.json';
-        axios.get(filePath).then((response) => {
-          this.chats = response.data.chats
-          this.chat = response.data.lastChat
-        }).catch((error) => {
-          console.error('Error fetching server data:', error);
-        });
-      },
-    },
-    created() {
-      this.fetchData();
-    },
-  };
+    setChats(friend) {
+      this.setView("messages");
+      this.chat = friend;
+    }
+  },
+  async created() {
+    try {
+      const data = await fetchData();
+      this.chats = data.chats;
+      this.friends = data.friends
+    } catch (error) {
+      console.error('Error in created hook:', error);
+    }
+  },
+};
 </script>
+
 <style scoped>
   .title {
     color: whitesmoke;
@@ -67,6 +80,7 @@
   }
 
   button {
+    cursor: pointer;
     border-radius: 5px;
     color: white;
     background-color: black;
