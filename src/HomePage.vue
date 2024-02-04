@@ -62,19 +62,18 @@ export default {
 
 <style scoped>
   .title {
-    color: whitesmoke;
+    color: var(--text);
     font-weight: 700;
     font-size: 1.2rem;
-    border-bottom: 0.2rem solid #1c1a27;
+    border-bottom: 0.2rem solid var(--border-alt);
     margin-bottom: 0.5rem;
   }
 
   input {
     width: 10rem;
     border-radius: 5px;
-    background-color: black;
-    border: solid white 0.1rem;
-    color: white;
+    border: solid var(--border-alt) 0.2rem;
+    color: var(--text);
     outline: none;
     padding: 0.5rem;
   }
@@ -82,9 +81,8 @@ export default {
   button {
     cursor: pointer;
     border-radius: 5px;
-    color: white;
-    background-color: black;
-    border: solid white 0.1rem;
+    color: var(--text);
+    border: solid var(--border-alt) 0.2rem;
     padding: 0.2rem;
     width: 11rem;
     margin: 0.5rem 0 0.5rem 0;
@@ -92,8 +90,6 @@ export default {
   }
 
   button:hover {
-    background-color: white;
-    color: black;
     transform: scale(1.05);
     transition: ease 0.5s;
   }
@@ -103,25 +99,25 @@ export default {
     display: flex;
     flex-direction: column;
     width: 12rem;
-    background-color: var(--colore2);
+    background-color: var(--background-alt);
     padding: 0.5rem;
     align-items: center;
     height: 100vh;
     z-index: 31;
-    border-right: 0.3rem solid var(--colore3);
+    border-right: 0.3rem solid var(--border);
     box-sizing: border-box;
     /* Per allineare */
     float: left;
   }
 
   .friend {
-    color: white;
+    color: var(--text);
     transition: ease 0.5s;
     width: 100%;
   }
 
   .selectedFriend {
-    background-color: red;
+    background-color: var(--selected);
   }
 
   .friend:hover {

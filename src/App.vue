@@ -17,17 +17,21 @@
   @import url("https://fonts.googleapis.com/css2?family=Yantramanav:wght@100;300;400;500;700;900&display=swap");
 
   :root {
-    --sfondo: #1c1a27;
-    --colore2: #282633;
-    --colore3: #34333f;
-    --whitesmoke: #f5f5f5;
+    --background: #1c1a27;
+    --background-alt: #282633;
+    --border: #34333f;
+    --border-alt: #1c1a27;
+    --text: #f5f5f5;
+    --selected: #ff0000;
+    --notification: #ff0000;
+    --status-online: rgb(20, 255, 50);
   }
 
   body,
   html {
     margin: 0;
     padding: 0;
-    background-color: var(--sfondo);
+    background-color: var(--background);
   }
 
   #app {
@@ -35,7 +39,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: left;
-    color: #2c3e50;
   }
 
   .router-link {

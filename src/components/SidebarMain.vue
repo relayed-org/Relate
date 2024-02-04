@@ -6,9 +6,14 @@
       </router-link>
       <div class="infoaccount">
         <p>Sim0</p>
-        <p class="status">ONLINE</p>
+        <p class="status">ONLINE <a id="selectStatus" @click="changeStatus()" style="color: red; cursor: pointer; font-size: 16px;">⌄</a></p> 
       </div>
+      <router-link to="/settings"> <button>⚙</button>
+</router-link>
+     
     </div>
+   
+    
     <router-link class="router-link server-link" v-for="(ServerInfo, index) in servers" :key="index" :to="{ name: 'server', params: { ServerId: index } }">
       <div @click="selectedServer=ServerInfo['name']" class="server" :class="{ 'selectedServer': ServerInfo['name'] == this.selectedServer }">
         <img :src="ServerInfo['icon']" />
@@ -34,6 +39,10 @@
         selectedServer: null
       };
     },
+    methods: {
+    changeStatus() {
+    },
+  },
     async created() {
       try {
           const data = await fetchData();
@@ -50,21 +59,20 @@
     display: flex;
     flex-direction: column;
     width: 12rem;
-    background-color: var(--colore2);
+    background-color: var(--background-alt);
     padding: 0.5rem;
     align-items: center;
     height: 100vh;
     z-index: 31;
-    border-right: 0.2rem solid var(--colore3);
+    border-right: 0.2rem solid var(--border);
     box-sizing: border-box;
     float: left;
   }
 
   .notifica {
     position: absolute;
-    background-color: red;
+    background-color: var(--notification);
     border-radius: 1rem;
-    color: white;
     text-decoration: none;
     height: 1.3rem;
     width: 1.3rem;
@@ -72,7 +80,7 @@
   }
 
   .notifica svg {
-    fill: white;
+    fill: var(--text);
     width: 0.7rem;
   }
 
@@ -98,13 +106,13 @@
   }
 
   .infoaccount p:first-child {
-    color: white;
+    color: var(--text);
     font-size: 1.2rem;
   }
 
   .infoaccount p:last-child {
     font-size: 0.7rem;
-    color: rgb(20, 255, 50);
+    color: var(--status-online);
     font-weight: 800;
     opacity: 0.7;
   }
@@ -121,7 +129,7 @@
 
   .txtserver {
     align-self: center;
-    color: white;
+    color: var(--text);
     cursor: pointer;
   }
 
@@ -132,7 +140,7 @@
   }
 
   .selectedServer {
-    background-color: red;
+    background-color: var(--selected);
   }
 
   .server-link{

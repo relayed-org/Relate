@@ -60,24 +60,24 @@
     display: flex;
     flex-direction: column;
     width: 12rem;
-    background-color: var(--colore2);
+    background-color: var(--background-alt);
     padding: 0.5rem;
     align-items: center;
     height: 100vh;
     z-index: 31;
-    border-right: 0.3rem solid var(--colore3);
+    border-right: 0.3rem solid var(--border);
     box-sizing: border-box;
     /* Per allineare */
     float: left;
   }
 
   .servertitle {
-    color: var(--whitesmoke);
+    color: var(--text);
     font-size: 1.5rem;
     font-weight: 800;
     text-align: center;
     margin-bottom: 1rem;
-    border-bottom: solid var(--colore3) 0.15rem;
+    border-bottom: solid var(--border) 0.15rem;
   }
 
   .pfpvocale img {
@@ -89,22 +89,21 @@
   }
 
   .chats {
-    color: var(--whitesmoke);
+    color: var(--text);
     text-align: center;
     cursor: pointer;
     gap: 0.6rem;
     display: flex;
     flex-direction: column;
-    border: solid var(--colore3) 0.15rem;
+    border: solid var(--border) 0.15rem;
     padding: 1rem 0 1rem 0;
-    background-color: #1c1a27;
     border-radius: 0.5rem;
     width: 100%;
     margin-bottom: 0.5rem;
   }
 
   .selectedChat {
-    background-color: red;
+    background-color: var(--selected);
   }
 
   .chats p {

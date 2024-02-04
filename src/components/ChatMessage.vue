@@ -57,7 +57,7 @@ export default {
   }
 
   .nome {
-    color: var(--whitesmoke);
+    color: var(--text);
     font-size: 1.5rem;
     align-self: center;
   }
@@ -72,7 +72,7 @@ export default {
     margin-right: 0.5rem;
   }
   .txt {
-    color: var(--whitesmoke);
+    color: var(--text);
     padding: 0 1rem 0 1rem;
   }
 </style>
