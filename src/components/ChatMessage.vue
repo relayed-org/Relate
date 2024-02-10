@@ -40,7 +40,7 @@ p {
   display: flex;
   justify-self: start;
   justify-content: start;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
 }
 
 a {
@@ -51,7 +51,7 @@ a {
 .infotxt {
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 0.6rem;
 }
 
 .pfptxt {
@@ -59,7 +59,6 @@ a {
   border-radius: 10rem;
   width: 2.5rem;
   height: 2.5rem;
-  padding: 0.5rem;
   align-self: center;
 }
 
@@ -81,6 +80,5 @@ a {
 }
 .txt {
   color: var(--text);
-  padding: 0 1rem 0 1rem;
 }
 </style>

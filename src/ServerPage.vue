@@ -3,212 +3,214 @@
     <div class="servertitle">
       <p>{{ server.name }}</p>
     </div>
-    <div v-for="(channel, group) in server.groups" :key="group" class="chats">
-      <p id="category">--- {{ group }} ---</p>
-      <div
-        v-for="(data, channelName) in channel"
-        :key="channelName"
-        class="chat-item"
-      >
-        <p
-          @click="
+    <div id="contents">
+      <div v-for="(channel, group) in server.groups" :key="group" class="chats">
+        <p class="category">⌄ {{ group }}</p>
+        <div v-for="(data, channelName) in channel" :key="channelName" class="chat-item">
+          <p @click="
             this.chats = data['chats'];
             this.selectedChat = channelName;
-          "
-          :class="{ selectedChat: channelName == this.selectedChat }"
-        >
-          {{ channelName }}
-        </p>
-        <div class="pfpvocale">
-          <img
-            v-for="(userData, user) in data.active"
-            :key="user"
-            :src="userData"
-          />
+          " :class="{ selectedChat: channelName == this.selectedChat }">
+            <template v-if="data.type === 'text'">
+              <span class="typeText">#</span>
+            </template>{{ channelName }}
+          </p>
+          <div class="pfpvocale">
+            <img v-for="(userData, user) in data.active" :key="user" :src="userData" />
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <ChatMessage
-    v-for="(message, index) in chats"
-    :key="index"
-    :message="message.text"
-    :username="message.username"
-    :roles="message.roles"
-    :pfp="message.pfp"
-  />
-  <div class="write-bar">
-    <input class="scrivi" placeholder="Send a message..." />
-    <div class="selectfile">
-      <input type="file" />
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-        <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
-        <path
-          d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"
-        />
-      </svg>
+  <div id="mainPanel">
+    <h1 class="welcomeMessage">Welcome to {{selectedChat}}!</h1>
+    <ChatMessage v-for="(message, index) in chats" :key="index" :message="message.text" :username="message.username" :roles="message.roles" :pfp="message.pfp" />
+    <div class="write-bar">
+      <input class="scrivi" placeholder="Send a message..." />
+      <label class="selectfile">
+        <input type="file" />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+          <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
+          <path d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z" />
+        </svg>
+      </label>
     </div>
   </div>
 </template>
 <script>
-import ChatMessage from "./components/ChatMessage.vue";
-import axios from "axios";
-export default {
-  name: "App",
-  components: {
-    ChatMessage,
-  },
-  data() {
-    return {
-      server: {},
-      chats: [],
-      selectedChat: String,
-    };
-  },
-  props: {
-    ServerId: String,
-  },
-  methods: {
-    fetchData() {
-      const filePath = "/user/profile.json";
-      axios
-        .get(filePath)
-        .then((response) => {
+  import ChatMessage from "./components/ChatMessage.vue";
+  import axios from "axios";
+  export default {
+    name: "App",
+    components: {
+      ChatMessage,
+    },
+    data() {
+      return {
+        server: {},
+        chats: [],
+        selectedChat: "",
+      };
+    },
+    props: {
+      ServerId: String,
+    },
+    methods: {
+      fetchData() {
+        const filePath = "/user/profile.json";
+        axios.get(filePath).then((response) => {
           this.server = response.data.servers[this.ServerId];
-          this.chats =
-            this.server.groups["Text Channels"][this.server.lastChat]["chats"];
+          this.chats = this.server.groups["Text Channels"][this.server.lastChat]["chats"];
           this.selectedChat = this.server.lastChat;
-        })
-        .catch((error) => {
+        }).catch((error) => {
           console.error("Error fetching server data:", error);
         });
+      },
     },
-  },
-  created() {
-    this.fetchData();
-  },
-  beforeRouteUpdate(to, from, next) {
-    this.fetchData();
-    next();
-  },
-};
+    created() {
+      this.fetchData();
+    },
+    beforeRouteUpdate(to, from, next) {
+      this.fetchData();
+      next();
+    },
+  };
 </script>
 <style scoped>
-.container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 12rem;
-  background-color: var(--background-alt);
-  padding: 0.5rem;
-  align-items: center;
-  height: 100vh;
-  z-index: 31;
-  border-right: 0.3rem solid var(--border);
-  box-sizing: border-box;
-  /* Per allineare */
-  float: left;
-}
+  .container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 14rem;
+    background-color: var(--background-alt);
+    padding: 0.6rem;
+    align-items: center;
+    height: 100vh;
+    z-index: 31;
+    box-sizing: border-box;
+    /* Per allineare */
+    float: left;
+  }
 
-.servertitle {
-  color: var(--text);
-  font-size: 1.5rem;
-  font-weight: 800;
-  text-align: center;
-  margin-bottom: 1rem;
-  border-bottom: solid var(--border) 0.15rem;
-}
+  .servertitle {
+    width: 100%;
+    color: var(--text);
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-align: center;
+    padding-bottom: 0.6rem;
+    position: absolute;
+    background-color: var(--background-alt);
+    border-bottom: solid var(--border) 0.15rem;
+  }
 
-.pfpvocale img {
-  object-fit: cover;
-  border-radius: 10rem;
-  width: 2rem;
-  height: 2rem;
-  padding: 0.2rem;
-}
+  #contents {
+    margin-top: 36px;
+    width: 100%;
+  }
 
-.chats {
-  color: var(--text);
-  text-align: center;
-  gap: 0.6rem;
-  display: flex;
-  border-bottom: solid 0.2rem var(--border);
-  flex-direction: column;
-  padding: 1rem 0 1rem 0;
-  width: 80%;
-  margin-bottom: 0.5rem;
-}
+  .pfpvocale img {
+    object-fit: cover;
+    border-radius: 10rem;
+    width: 2rem;
+    height: 2rem;
+    padding: 0.2rem;
+  }
 
-.selectedChat {
-  background-color: hsl(var(--selected));
-  border-radius: 5px;
-}
+  .chats {
+    color: var(--text);
+    gap: 2.8px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 8px;
+    width: 100%;
+  }
 
-.chats p {
-  transition: ease 0.5s;
-  cursor: pointer;
-}
+  .selectedChat {
+    background-color: var(--selected);
+  }
 
-#category {
-  cursor: default;
-}
+  .chats p {
+    transition: ease 0.2s;
+    cursor: pointer;
+  }
 
-.chats .chat-item p:hover {
-  transform: scale(1.1);
-  transition: ease 0.5s;
-}
+  .category {
+    text-align: center;
+    cursor: default;
+    margin-bottom: 3px;
+    margin-right: 14px;
+  }
 
-.write-bar {
-  position: absolute;
-  bottom: 0;
-  left: 24rem;
-  right: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
+  .chats .chat-item p:hover {
+    transition: ease 0.2s;
+    background-color: var(--selected);
+  }
 
-.scrivi {
-  width: 200rem;
-  bottom: 0;
-  margin: 0 0 0.1rem 0.5rem;
-  border-radius: 5px;
-  outline: none;
-  border: none;
-  padding: 0.5rem;
-  background-color: var(--background-alt);
-  color: var(--text);
-}
+  .chat-item p {
+    padding: 4px;
+    border-radius: 4px;
+  }
 
-.selectfile {
-  width: 8rem;
-  height: 1rem;
-  bottom: 0;
-  margin: 0 0 0.1rem 0.5rem;
-  border-radius: 5px;
-  background-color: var(--background-alt);
-  outline: none;
-  border: none;
-  padding: 0.5rem;
-  color: var(--text);
-  color: transparent;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 5px;
-}
+  .typeText {
+    margin-right: 8px;
+    padding-left: 5px;
+    font-weight: bold;
+  }
 
-.selectfile svg {
-  fill: var(--white);
-  width: 2.4rem;
-}
+  #mainPanel {
+    background-color: var(--background);
+    right: 0;
+    width: calc(100% - 28rem);
+    height: calc(100vh - 2rem);
+    padding: 1rem;
+    float: right;
+    position: absolute;
+  }
 
-.selectfile input::-webkit-file-upload-button {
-  -webkit-appearance: none;
-  background-color: transparent;
-  width: 100%;
-  padding: 0.2rem;
-  outline: none;
-  border: none;
-}
+  .welcomeMessage {
+    color: var(--text);
+  }
+
+  .write-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+    width: calc(100% - 2rem);
+    bottom: 1rem;
+  }
+
+  .scrivi {
+    width: 200rem;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    padding: 0.5rem;
+    background-color: var(--background-alt);
+    color: var(--text);
+  }
+
+  .selectfile {
+    margin: 0 0 0.1rem 0.5rem;
+    background-color: var(--background-alt);
+    padding: 0.5rem;
+    color: var(--text);
+    color: transparent;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 5px;
+  }
+
+  .selectfile svg {
+    fill: var(--white);
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  .selectfile input {
+    display: none;
+  }
 </style>

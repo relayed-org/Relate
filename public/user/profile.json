@@ -1,18 +1,21 @@
 {
   "servers": {
     "5445": {
-      "lastChat": "Generale",
+      "lastChat": "General",
       "name": "Asdrubale Server",
       "icon": "../user/cached/asd.png",
       "groups": {
         "Welcome": {
-          "Rules": {}
+          "Rules": {
+            "type": "text"
+          }
         },
         "Text Channels": {
-          "Generale": {
+          "General": {
+            "type": "text",
             "chats": [
               {
-                "text": "Benvenuti nel mio server!",
+                "text": "Welcome to my server!",
                 "username": "Asdrubale",
                 "roles": [
                   {
@@ -23,14 +26,15 @@
                 "pfp": "/user/cached/pfp2.jpg"
               },
               {
-                "text": "Grazie!",
+                "text": "Thanks!",
                 "username": "Sim0",
                 "roles": [],
                 "pfp": "/user/cached/pfp.jpg"
               }
             ]
           },
-          "Chat #1": {
+          "Chat 1": {
+            "type": "text",
             "chats": [
               {
                 "text": "Chat #1",
@@ -40,16 +44,18 @@
               }
             ]
           },
-          "Chat #2": {}
+          "Chat 2": {
+            "type": "text"
+          }
         },
         "Voice Channels": {
-          "Asdru-vocale": {
+          "Voice 1": {
             "active": [
               "/user/cached/pfp.jpg",
               "/user/cached/pfp2.jpg"
             ]
           },
-          "Vocale giocatori": {
+          "Gamers Only": {
             "active": [
               "/user/cached/logo.png"
             ]
@@ -58,15 +64,16 @@
       }
     },
     "8743": {
-      "lastChat": "Generale",
+      "lastChat": "General",
       "name": "Ian Server",
       "icon": "../user/cached/logo.png",
       "groups": {
         "Text Channels": {
-          "Generale": {
+          "General": {
+            "type": "text",
             "chats": [
               {
-                "text": "Benvenuti nel mio server!",
+                "text": "Welcome to my server!",
                 "username": "Ian",
                 "roles": [
                   {
@@ -87,39 +94,48 @@
     }
   },
   "lastChat": "Asdrubale",
-  "friends":[
-    "Asdrubale",
-    "Ian",
-    "Niled"
-  ],
+  "friends":{
+    "Asdrubale": {"pfp": "/user/cached/pfp2.jpg"},
+    "Ian": {"pfp": "/user/cached/pfp2.jpg"},
+    "nileD": {"pfp": "/user/cached/pfp3.jpg"},
+    "SouthGD": {"pfp": "/user/cached/pfp4.jpg"}
+
+    
+  },
   "chats": {
-    "Asdrubale": [
-      {
-        "text": "Ciao!",
-        "username": "Sim0",
-        "roles": [],
-        "pfp": "/user/cached/pfp.jpg"
-      },
-      {
-        "text": "Come butta pastasciutta!",
-        "username": "Asdrubale",
-        "roles": [],
-        "pfp": "/user/cached/pfp2.jpg"
-      }
-    ],
-    "Ian": [
-      {
-        "text": "Relayed!",
-        "username": "Ian",
-        "roles": [],
-        "pfp": "/user/cached/logo.png"
-      },
-      {
-        "text": "Ciao!",
-        "username": "Sim0",
-        "roles": [],
-        "pfp": "/user/cached/pfp.jpg"
-      }
-    ]
+    "Asdrubale": {
+      "pfp": "/user/cached/pfp2.jpg",
+      "messages": [
+        {
+          "text": "Hi!",
+          "username": "Sim0",
+          "roles": [],
+          "pfp": "/user/cached/pfp.jpg"
+        },
+        {
+          "text": "What is up!",
+          "username": "Asdrubale",
+          "roles": [],
+          "pfp": "/user/cached/pfp2.jpg"
+        }
+      ]
+    },
+    "Ian": {
+      "pfp": "/user/cached/logo.png",
+      "messages": [
+        {
+          "text": "Relayed!",
+          "username": "Ian",
+          "roles": [],
+          "pfp": "/user/cached/logo.png"
+        },
+        {
+          "text": "Hello!",
+          "username": "Sim0",
+          "roles": [],
+          "pfp": "/user/cached/pfp.jpg"
+        }
+      ]
+    }
   }
 }

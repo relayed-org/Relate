@@ -30,13 +30,12 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 12rem;
+  width: 14rem;
   background-color: var(--background-alt);
   padding: 0.5rem;
   align-items: center;
   height: 100vh;
   z-index: 31;
-  border-right: 0.3rem solid var(--border);
   box-sizing: border-box;
   text-align: center;
   float: left;

@@ -3,26 +3,42 @@
     <button @click="setView('friends')">Friends</button>
 
     <p class="title">Direct Messages</p>
-    <p
-      class="friend"
-      :class="{ selectedFriend: friend == this.chat }"
-      v-for="(userChats, friend) in chats"
-      :key="friend"
-      @click="setChats(friend)"
-    >
-      {{ friend }}
-    </p>
+
+    <div class="chats">
+    <div class="chat" :class="{ selectedChat: friend == this.chat }" v-for="(chatData, friend) in chats"
+
+      :key="friend" @click="setChats(friend)">
+
+      <img class="chatPfp" :src="chatData.pfp" />
+    
+      <div >
+      <p
+      class="chatUsername"
+
+    >{{ friend }}
+     </p>
+     <p class="chatLastMessage">{{getLastMessage(chatData, this.chat)}}</p>
+    </div>
+      
+   
+    </div>
+    </div>
+    
   </div>
-  <div>
+  <div id="mainPanel">
     <template v-if="currentView === 'messages'">
-      <ChatMessage
-        v-for="(message, index) in chats[chat]"
-        :key="index"
-        :message="message.text"
-        :username="message.username"
-        :roles="message.roles"
-        :pfp="message.pfp"
-      />
+        <template v-if="chats[chat]">
+        <h1 class="welcomeMessage">{{chat}}</h1>
+        <p class="welcomeDescription">This is the start of your conversation with {{chat}}!</p>
+        <ChatMessage
+          v-for="(message, index) in chats[chat].messages"
+          :key="index"
+          :message="message.text"
+          :username="message.username"
+          :roles="message.roles"
+          :pfp="message.pfp"
+        />
+      </template>
       <div class="write-bar">
         <input class="scrivi" placeholder="Send a message..." />
         <div class="selectfile">
@@ -49,7 +65,7 @@
         </button>
       </div>
       <div class="lista-f">
-        <p v-for="friend in friends" :key="friend" @click="addChat(friend)">
+        <p v-for="friendData, friend in friends" :key="friend" @click="addChat(friend, friendData)">
           {{ friend }}
         </p>
       </div>
@@ -68,7 +84,7 @@ export default {
   },
   data() {
     return {
-      friends: [],
+      friends: {},
       chats: [],
       chat: "Asdrubale",
       currentView: "messages",
@@ -82,6 +98,20 @@ export default {
       this.setView("messages");
       this.chat = friend;
     },
+    addChat(friend,friendData) {
+      if (!(friend in this.chats)){
+        this.chats[friend] =  {"pfp": friendData.pfp}
+      }
+      this.chat = friend;
+    },
+    getLastMessage(chatData) {
+        if (chatData["messages"]) {
+            return chatData.messages[chatData.messages.length - 1].text;
+        } else {
+            return "";
+        }
+    }
+
   },
   async created() {
     try {
@@ -96,18 +126,31 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 14rem;
+  background-color: var(--background-alt);
+  padding: 0.6rem;
+  align-items: center;
+  height: 100vh;
+  z-index: 31;
+  box-sizing: border-box;
+  float: left;
+  
+}
 .title {
   color: var(--text);
   font-weight: 700;
   font-size: 1.2rem;
-  border-bottom: 0.2rem solid var(--border-alt);
   margin-bottom: 1rem;
 }
 
 .input-f {
   width: 70%;
   border-radius: 5px;
-  border: solid var(--border-alt) 0.2rem;
+  border: solid var(--border) 0.2rem;
   background-color: hsl(var(--selected), 0.3);
   outline: none;
   padding: 0.5rem;
@@ -162,7 +205,6 @@ export default {
   fill: var(--white);
   align-self: center;
 }
-
 .buttons-friends {
   display: flex;
   flex-direction: row;
@@ -187,21 +229,6 @@ button:hover {
   transition: ease 0.5s;
 }
 
-.container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 12rem;
-  background-color: var(--background-alt);
-  padding: 0.5rem;
-  align-items: center;
-  height: 100vh;
-  z-index: 31;
-  border-right: 0.3rem solid var(--border);
-  box-sizing: border-box;
-  float: left;
-}
-
 .friend {
   color: var(--text);
   transition: ease 0.5s;
@@ -211,9 +238,42 @@ button:hover {
   text-align: center;
 }
 
-.selectedFriend {
-  background-color: hsl(var(--selected));
-  border-radius: 5px;
+.chats{
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 3px;
+}
+.chat{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: row;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: ease 0.2s;
+}
+.chat:hover{
+  background-color: var(--selected);
+
+}
+.chatUsername{
+  color: var(--text);
+}
+.chatPfp{
+  object-fit: cover;
+  border-radius: 10rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  align-self: center;
+  padding: 0.5rem 0.7rem 0.5rem 0.7rem;
+}
+
+.chatLastMessage{
+  color: var(--text-alt);
+}
+.selectedChat {
+  background-color: var(--selected);
 }
 
 .friend:hover {
@@ -224,57 +284,62 @@ button:hover {
   transition: ease 0.5s;
 }
 
+#mainPanel {
+    background-color: var(--background);
+    right: 0;
+    width: calc(100% - 28rem);
+    height: calc(100vh - 2rem);
+    padding: 1rem;
+    float: right;
+    position: absolute;
+  }
+
+  .welcomeMessage {
+    color: var(--text);
+  }
+  .welcomeDescription{
+    color: var(--text-alt);
+    padding-bottom: 1.6rem;
+  }
+
 .write-bar {
-  position: absolute;
-  bottom: 0;
-  left: 24rem;
-  right: 0.5rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+    width: calc(100% - 2rem);
+    bottom: 1rem;
+  }
 
-.scrivi {
-  width: 200rem;
-  bottom: 0;
-  margin: 0 0 0.1rem 0.5rem;
-  border-radius: 5px;
-  outline: none;
-  border: none;
-  padding: 0.5rem;
-  background-color: var(--background-alt);
-  color: var(--text);
-}
+  .scrivi {
+    width: 200rem;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    padding: 0.5rem;
+    background-color: var(--background-alt);
+    color: var(--text);
+  }
 
-.selectfile {
-  width: 8rem;
-  height: 1rem;
-  bottom: 0;
-  margin: 0 0 0.1rem 0.5rem;
-  border-radius: 5px;
-  background-color: var(--background-alt);
-  outline: none;
-  border: none;
-  padding: 0.5rem;
-  color: var(--text);
-  color: transparent;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 5px;
-}
+  .selectfile {
+    margin: 0 0 0.1rem 0.5rem;
+    background-color: var(--background-alt);
+    padding: 0.5rem;
+    color: var(--text);
+    color: transparent;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 5px;
+  }
 
-.selectfile svg {
-  fill: var(--white);
-  width: 2.4rem;
-}
+  .selectfile svg {
+    fill: var(--white);
+    width: 1.8rem;
+    height: 1.8rem;
+  }
 
-.selectfile input::-webkit-file-upload-button {
-  -webkit-appearance: none;
-  background-color: transparent;
-  width: 100%;
-  padding: 0.2rem;
-  outline: none;
-  border: none;
-}
+  .selectfile input {
+    display: none;
+  }
 </style>
