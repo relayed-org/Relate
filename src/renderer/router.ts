@@ -1,4 +1,3 @@
-// router.js
 import { createRouter, createWebHistory } from 'vue-router';
 import homePage from './HomePage.vue';
 import serverComponent from './ServerPage.vue';
@@ -11,7 +10,7 @@ const routes = [
   },
   {
     path: '/server/:ServerId',
-    name: 'server', // Make sure you have a name for the route
+    name: 'server',
     component: serverComponent,
     props: true,
   },

@@ -44,12 +44,12 @@
     </div>
     <router-link to="/" class="router-link server-link">
      <div @click="selectedServer = null" class="server" id="home">
-        <img src="@/assets/home.png"/>
+        <img src="/home.png"/>
         <p class="txtserver">Home</p>
      </div>
     </router-link>
     <router-link class="router-link server-link" v-for="(ServerInfo, index) in servers" :key="index" :to="{ name: 'server', params: { ServerId: index } }">
-      <div @click="selectedServer = ServerInfo['name']" class="server" :class="{ selectedServer: ServerInfo['name'] == this.selectedServer }">
+      <div @click="selectedServer = ServerInfo['name']" class="server" :class="{ selectedServer: ServerInfo['name'] == selectedServer }">
         <img :src="ServerInfo['icon']" />
         <p class="notifica">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -63,7 +63,7 @@
     </router-link>
   </div>
 </template>
-<script>
+<script lang="ts">
   import {
     fetchData
   } from "../methods";
@@ -81,43 +81,36 @@
       try {
         const data = await fetchData();
         this.servers = data.servers;
-        const status = document.getElementById("status");
-        const cerchio = document.getElementById("cerchiostatus");
-        let ndef = 0;
-        status.addEventListener("click", function select() {
-          const getoption = document.querySelectorAll("select");
-          let getoption2 = getoption[0].value;
-          if (getoption2 == "online") {
-            ndef = 0;
-            setcolor();
-          } else if (getoption2 == "afk") {
-            ndef = 1;
-            setcolor();
-          } else if (getoption2 == "offline") {
-            ndef = 2;
-            setcolor();
-          } else {
-            alert("error");
-          }
-
-          function setcolor() {
-            const status = document.getElementById("status");
-            if (ndef == 0) {
-              status.style.color = "var(--status-online)";
-              cerchio.style.backgroundColor = "var(--status-online)";
-            } else if (ndef == 1) {
-              status.style.color = "var(--status-afk)";
-              cerchio.style.backgroundColor = "var(--status-afk)";
-            } else if (ndef == 2) {
-              status.style.color = "var(--status-offline)";
-              cerchio.style.backgroundColor = "var(--status-offline)";
-            } else {
-              alert("error");
-            }
-          }
-        });
+        
       } catch (error) {
         console.error("Error in created hook:", error);
+        
+      }
+
+      const status = document.getElementById("status");
+      const cerchio = document.getElementById("cerchiostatus");
+
+      if (status && cerchio != null){
+        status.addEventListener("click", function select() {
+         
+
+          const getoption = document.querySelectorAll("select");
+          let getoption2 = getoption[0].value;
+
+          if (getoption2 == "online") {
+            status.style.color = "var(--status-online)";
+            cerchio.style.backgroundColor = "var(--status-online)";
+
+          } else if (getoption2 == "afk") {
+            status.style.color = "var(--status-afk)";
+              cerchio.style.backgroundColor = "var(--status-afk)";
+
+          } else if (getoption2 == "offline") {
+            status.style.color = "var(--status-offline)";
+            cerchio.style.backgroundColor = "var(--status-offline)";
+            
+          }
+        });
       }
     },
   };

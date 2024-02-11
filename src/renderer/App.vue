@@ -1,10 +1,9 @@
 <template>
-  <div id="app">
-    <SidebarMain />
+    <SidebarMain/>
     <router-view></router-view>
-  </div>
 </template>
-<script>
+
+<script lang="ts">
 import SidebarMain from "./components/SidebarMain.vue";
 export default {
   name: "App",
@@ -13,6 +12,7 @@ export default {
   },
 };
 </script>
+
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Yantramanav:wght@100;300;400;500;700;900&display=swap");
 

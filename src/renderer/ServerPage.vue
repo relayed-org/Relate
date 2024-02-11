@@ -8,9 +8,9 @@
         <p class="category">⌄ {{ group }}</p>
         <div v-for="(data, channelName) in channel" :key="channelName" class="chat-item">
           <p @click="
-            this.chats = data['chats'];
-            this.selectedChat = channelName;
-          " :class="{ selectedChat: channelName == this.selectedChat }">
+            chats = data['chats'];
+            selectedChat = channelName;
+          " :class="{ selectedChat: channelName == selectedChat }">
             <template v-if="data.type === 'text'">
               <span class="typeText">#</span>
             </template>{{ channelName }}
@@ -37,7 +37,7 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts">
   import ChatMessage from "./components/ChatMessage.vue";
   import axios from "axios";
   export default {
@@ -47,9 +47,9 @@
     },
     data() {
       return {
-        server: {},
-        chats: [],
-        selectedChat: "",
+        server: {} as { name: string, groups: any, lastChat: string },
+        chats: [] as any[],
+        selectedChat: "" ,
       };
     },
     props: {
@@ -57,15 +57,21 @@
     },
     methods: {
       fetchData() {
-        const filePath = "/user/profile.json";
-        axios.get(filePath).then((response) => {
-          this.server = response.data.servers[this.ServerId];
-          this.chats = this.server.groups["Text Channels"][this.server.lastChat]["chats"];
-          this.selectedChat = this.server.lastChat;
-        }).catch((error) => {
-          console.error("Error fetching server data:", error);
-        });
-      },
+  const filePath = "/user/profile.json";
+  axios.get(filePath).then((response) => {
+    if (this.ServerId && response.data.servers[this.ServerId]) {
+      const server = response.data.servers[this.ServerId];
+      this.server = server
+      this.chats = server.groups["Text Channels"][server.lastChat]["chats"];
+      this.selectedChat = server.lastChat;
+    } else {
+      console.error("Server ID is undefined or server data not found.");
+    }
+  }).catch((error) => {
+    console.error("Error fetching server data:", error);
+  });
+},
+
     },
     created() {
       this.fetchData();

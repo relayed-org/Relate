@@ -5,31 +5,27 @@
     <p class="title">Direct Messages</p>
 
     <div class="chats">
-    <div class="chat" :class="{ selectedChat: friend == this.chat }" v-for="(chatData, friend) in chats"
+      <div
+        class="chat"
+        :class="{ selectedChat: friend === chat }"
+        v-for="(chatData, friend) in chats"
+        :key="friend"
+        @click="setChats(friend)"
+      >
+        <img class="chatPfp" :src="chatData.pfp" />
 
-      :key="friend" @click="setChats(friend)">
-
-      <img class="chatPfp" :src="chatData.pfp" />
-    
-      <div >
-      <p
-      class="chatUsername"
-
-    >{{ friend }}
-     </p>
-     <p class="chatLastMessage">{{getLastMessage(chatData, this.chat)}}</p>
+        <div>
+          <p class="chatUsername">{{ friend }}</p>
+          <p class="chatLastMessage">{{ getLastMessage(chatData, chat) }}</p>
+        </div>
+      </div>
     </div>
-      
-   
-    </div>
-    </div>
-    
   </div>
   <div id="mainPanel">
     <template v-if="currentView === 'messages'">
-        <template v-if="chats[chat]">
-        <h1 class="welcomeMessage">{{chat}}</h1>
-        <p class="welcomeDescription">This is the start of your conversation with {{chat}}!</p>
+      <template v-if="chats[chat]">
+        <h1 class="welcomeMessage">{{ chat }}</h1>
+        <p class="welcomeDescription">This is the start of your conversation with {{ chat }}!</p>
         <ChatMessage
           v-for="(message, index) in chats[chat].messages"
           :key="index"
@@ -44,7 +40,6 @@
         <div class="selectfile">
           <input type="file" />
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-            <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
             <path
               d="M64 0C28.7 0 0 28.7 0 64V448c0 35.3 28.7 64 64 64H320c35.3 0 64-28.7 64-64V160H256c-17.7 0-32-14.3-32-32V0H64zM256 0V128H384L256 0zM216 408c0 13.3-10.7 24-24 24s-24-10.7-24-24V305.9l-31 31c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l72-72c9.4-9.4 24.6-9.4 33.9 0l72 72c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-31-31V408z"
             />
@@ -57,7 +52,6 @@
         <input class="input-f" placeholder="Add Friend..." id="addFriend" />
         <button class="plus">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-            <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc. -->
             <path
               d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
             />
@@ -65,7 +59,7 @@
         </button>
       </div>
       <div class="lista-f">
-        <p v-for="friendData, friend in friends" :key="friend" @click="addChat(friend, friendData)">
+        <p v-for="(friendData, friend) in friends" :key="friend" @click="addChat(friend, friendData)">
           {{ friend }}
         </p>
       </div>
@@ -73,45 +67,44 @@
   </div>
 </template>
 
-<script>
-import ChatMessage from "./components/ChatMessage.vue";
-import { fetchData } from "./methods";
+<script lang="ts">
+import ChatMessage from './components/ChatMessage.vue';
+import { fetchData } from './methods';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     ChatMessage,
   },
   data() {
     return {
-      friends: {},
-      chats: [],
-      chat: "Asdrubale",
-      currentView: "messages",
+      friends: {} as Record<string, any>,
+      chats: {} as Record<string, any>,
+      chat: 'Asdrubale',
+      currentView: 'messages',
     };
   },
   methods: {
-    setView(view) {
+    setView(view: string) {
       this.currentView = view;
     },
-    setChats(friend) {
-      this.setView("messages");
+    setChats(friend: string) {
+      this.setView('messages');
       this.chat = friend;
     },
-    addChat(friend,friendData) {
-      if (!(friend in this.chats)){
-        this.chats[friend] =  {"pfp": friendData.pfp}
+    addChat(friend: string, friendData: { pfp: any }) {
+      if (!(friend in this.chats)) {
+        this.chats[friend] = { pfp: friendData.pfp, messages: [] };
       }
       this.chat = friend;
     },
-    getLastMessage(chatData) {
-        if (chatData["messages"]) {
-            return chatData.messages[chatData.messages.length - 1].text;
-        } else {
-            return "";
-        }
-    }
-
+    getLastMessage(chatData: { messages: Array<{ text: string }> }, chat: string) {
+      if (chatData.messages.length) {
+        return chatData.messages[chatData.messages.length - 1].text;
+      } else {
+        return '';
+      }
+    },
   },
   async created() {
     try {
@@ -119,11 +112,12 @@ export default {
       this.chats = data.chats;
       this.friends = data.friends;
     } catch (error) {
-      console.error("Error in created hook:", error);
+      console.error('Error in created hook:', error);
     }
   },
 };
 </script>
+
 
 <style scoped>
 .container {
