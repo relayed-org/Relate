@@ -4,8 +4,8 @@
       <p>{{ server.name }}</p>
     </div>
     <div id="contents">
-      <div v-for="(channel, group) in server.groups" :key="group" class="chats">
-        <p class="category">⌄ {{ group }}</p>
+      <div v-for="(channel, groupName) in server.groups" :key="groupName" class="chats">
+        <p class="category">⌄ {{ groupName }}</p>
         <div v-for="(data, channelName) in channel" :key="channelName" class="chat-item">
           <p @click="
             chats = data['chats'];
@@ -38,49 +38,77 @@
   </div>
 </template>
 <script lang="ts">
-  import ChatMessage from "./components/ChatMessage.vue";
-  import axios from "axios";
-  export default {
-    name: "App",
-    components: {
-      ChatMessage,
-    },
-    data() {
-      return {
-        server: {} as { name: string, groups: any, lastChat: string },
-        chats: [] as any[],
-        selectedChat: "" ,
-      };
-    },
-    props: {
-      ServerId: String,
-    },
-    methods: {
-      fetchData() {
-  const filePath = "/user/profile.json";
-  axios.get(filePath).then((response) => {
-    if (this.ServerId && response.data.servers[this.ServerId]) {
-      const server = response.data.servers[this.ServerId];
-      this.server = server
-      this.chats = server.groups["Text Channels"][server.lastChat]["chats"];
-      this.selectedChat = server.lastChat;
-    } else {
-      console.error("Server ID is undefined or server data not found.");
-    }
-  }).catch((error) => {
-    console.error("Error fetching server data:", error);
-  });
-},
+import ChatMessage from "./components/ChatMessage.vue";
+import axios from "axios";
 
-    },
-    created() {
-      this.fetchData();
-    },
-    beforeRouteUpdate(to, from, next) {
-      this.fetchData();
-      next();
-    },
+interface Message {
+    text: string,
+    username: string,
+    pfp: string,
+    roles: { role: string, color: string }
+}
+
+interface Server {
+  name: string,
+  icon: string,
+  lastGroup: string,
+  lastChat: string,
+  groups: {
+    [groupName: string]: {
+      [channelName: string]: {
+        type: string,
+        chats: Message[],
+        active?: string[],
+      };
+    };
   };
+}
+
+export default {
+  name: "App",
+  components: {
+    ChatMessage,
+  },
+  data() {
+    return {
+      server: {} as Server,
+      chats: [] as Message[],
+      selectedChat: "" as string,
+    };
+  },
+  props: {
+    ServerId: String,
+  },
+  methods: {
+    fetchData() {
+      const filePath = "/user/profile.json";
+      axios
+        .get(filePath)
+        .then((response) => {
+          if (this.ServerId && response.data.servers[this.ServerId]) {
+            const server = response.data.servers[this.ServerId];
+            this.server = server;
+            this.chats =
+              server.groups[server.lastGroup][server.lastChannel]["chats"];
+            this.selectedChat = server.lastChannel;
+          } else {
+            console.error("Server ID is undefined or server data not found.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching server data:", error);
+        });
+    },
+  },
+  created() {
+    this.fetchData();
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.fetchData();
+    next();
+  },
+};
+
 </script>
 <style scoped>
   .container {

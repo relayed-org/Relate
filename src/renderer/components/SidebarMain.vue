@@ -2,7 +2,7 @@
   <div class="sidebar">
     <div class="userpanel">
       <div class="userinfo">
-        <router-link @click="selectedServer = null" to="/">
+        <router-link @click="selectedServer = ''" to="/">
           <div>
             <img src="/user/cached/pfp.jpg" />
             <div id="cerchiostatus" class="cerchiostatus"></div>
@@ -43,14 +43,14 @@
       </div>
     </div>
     <router-link to="/" class="router-link server-link">
-     <div @click="selectedServer = null" class="server" id="home">
+     <div @click="selectedServer = ''" class="server" id="home">
         <img src="/home.png"/>
         <p class="txtserver">Home</p>
      </div>
     </router-link>
-    <router-link class="router-link server-link" v-for="(ServerInfo, index) in servers" :key="index" :to="{ name: 'server', params: { ServerId: index } }">
-      <div @click="selectedServer = ServerInfo['name']" class="server" :class="{ selectedServer: ServerInfo['name'] == selectedServer }">
-        <img :src="ServerInfo['icon']" />
+    <router-link class="router-link server-link" v-for="(server, index) in servers" :key="index" :to="{ name: 'server', params: { ServerId: index } }">
+      <div @click="selectedServer = server.name" class="server" :class="{ selectedServer: server.name == selectedServer }">
+        <img :src="server['icon']" />
         <p class="notifica">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <!-- !Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.
@@ -58,20 +58,42 @@
             <path d="M224 0c-17.7 0-32 14.3-32 32V51.2C119 66 64 130.6 64 208v18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416H416c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8V208c0-77.4-55-142-128-156.8V32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3H224 160c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z" />
           </svg>
         </p>
-        <p class="txtserver">{{ ServerInfo["name"] }}</p>
+        <p class="txtserver">{{ server["name"] }}</p>
       </div>
     </router-link>
   </div>
 </template>
 <script lang="ts">
-  import {
-    fetchData
-  } from "../methods";
+  import {fetchData} from "../methods";
+  
+  interface Message {
+    text: string,
+    username: string,
+    pfp: string,
+    roles: { role: string, color: string }
+  }
+
+  interface Server {
+    name: string,
+    icon: string,
+    lastGroup: string,
+    lastChat: string,
+    groups: {
+      [groupName: string]: {
+      [channelName: string]: {
+        type: string,
+        chats: Message[],
+        active?: string[],
+        };
+      };
+    };
+  }
+
   export default {
     data() {
       return {
-        servers: [],
-        selectedServer: null,
+        servers: [] as Server[],
+        selectedServer: "" as string,
       };
     },
     methods: {

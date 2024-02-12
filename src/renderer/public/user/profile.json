@@ -1,7 +1,8 @@
 {
   "servers": {
     "5445": {
-      "lastChat": "General",
+      "lastGroup": "Text Channels",
+      "lastChannel": "General",
       "name": "Asdrubale Server",
       "icon": "../user/cached/asd.png",
       "groups": {
@@ -50,12 +51,14 @@
         },
         "Voice Channels": {
           "Voice 1": {
+            "type": "voice",
             "active": [
               "/user/cached/pfp.jpg",
               "/user/cached/pfp2.jpg"
             ]
           },
           "Gamers Only": {
+            "type": "voice",
             "active": [
               "/user/cached/logo.png"
             ]
@@ -64,7 +67,8 @@
       }
     },
     "8743": {
-      "lastChat": "General",
+      "lastGroup": "Text Channels",
+      "lastChannel": "General",
       "name": "Ian Server",
       "icon": "../user/cached/logo.png",
       "groups": {
@@ -99,8 +103,6 @@
     "Ian": {"pfp": "/user/cached/pfp2.jpg"},
     "nileD": {"pfp": "/user/cached/pfp3.jpg"},
     "SouthGD": {"pfp": "/user/cached/pfp4.jpg"}
-
-    
   },
   "chats": {
     "Asdrubale": {
