@@ -7,16 +7,16 @@
     <div class="chats">
       <div
         class="chat"
-        :class="{ selectedChat: friend === chat }"
-        v-for="(chatData, friend) in chats"
-        :key="friend"
-        @click="setChats(friend)"
+        :class="{ selectedChat: username === chat }"
+        v-for="(chatData, username) in chats"
+        :key="username"
+        @click="setChats(username)"
       >
         <img class="chatPfp" :src="chatData.pfp" />
 
         <div>
-          <p class="chatUsername">{{ friend }}</p>
-          <p class="chatLastMessage">{{ getLastMessage(chatData, chat) }}</p>
+          <p class="chatUsername">{{ username }}</p>
+          <p class="chatLastMessage" v-if="chatData.messages">{{ getLastMessage(chatData.messages) }}</p>
         </div>
       </div>
     </div>
@@ -59,8 +59,8 @@
         </button>
       </div>
       <div class="lista-f">
-        <p v-for="(friendData, friend) in friends" :key="friend" @click="addChat(friend, friendData)">
-          {{ friend }}
+        <p v-for="(friendData, username) in friends" :key="username" @click="addChat(username, friendData)">
+          {{ username }}
         </p>
       </div>
     </template>
@@ -69,7 +69,14 @@
 
 <script lang="ts">
 import ChatMessage from './components/ChatMessage.vue';
-import { fetchData } from './methods';
+import { fetchData} from './methods';
+
+interface Message {
+  text: string,
+  username: string,
+  pfp: string,
+  roles: { role: string, color: string }
+}
 
 export default {
   name: 'App',
@@ -78,8 +85,8 @@ export default {
   },
   data() {
     return {
-      friends: {} as Record<string, any>,
-      chats: {} as Record<string, any>,
+      friends: {} as {[username: string] : {pfp: string}},
+      chats: {} as {[username: string] : {pfp: string, messages?: [Message]}},
       chat: 'Asdrubale',
       currentView: 'messages',
     };
@@ -92,15 +99,15 @@ export default {
       this.setView('messages');
       this.chat = friend;
     },
-    addChat(friend: string, friendData: { pfp: any }) {
+    addChat(friend: string, friendData: { pfp: string }) {
       if (!(friend in this.chats)) {
-        this.chats[friend] = { pfp: friendData.pfp, messages: [] };
+        this.chats[friend] = { "pfp": friendData.pfp};
       }
       this.chat = friend;
     },
-    getLastMessage(chatData: { messages: Array<{ text: string }> }, chat: string) {
-      if (chatData.messages.length) {
-        return chatData.messages[chatData.messages.length - 1].text;
+    getLastMessage(messages: Message[]) {
+      if (messages.length) {
+        return messages[messages.length - 1].text;
       } else {
         return '';
       }
