@@ -122,7 +122,6 @@ export default {
     height: 100vh;
     z-index: 31;
     box-sizing: border-box;
-    /* Per allineare */
     float: left;
   }
 
